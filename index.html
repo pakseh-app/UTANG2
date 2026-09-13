@@ -8,7 +8,7 @@
   <style>
     :root{--bg:#f3f4f6;--card:#fff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;--primary:#2563eb;--danger:#dc2626;--ok:#16a34a;--warn:#d97706}
     *{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text)}
-    .wrap{max-width:1180px;margin:auto;padding:18px}.admin-layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:16px;align-items:start}.admin-sidebar{position:sticky;top:12px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px}.admin-sidebar h3{font-size:14px;margin:4px 8px 12px}.admin-nav{display:flex;flex-direction:column;gap:6px}.admin-nav button{border:0;background:transparent;text-align:left;padding:11px 12px;border-radius:10px;font:inherit;font-weight:700;color:#374151;cursor:pointer}.admin-nav button.active,.admin-nav button:hover{background:#eff6ff;color:#1d4ed8}.admin-content{min-width:0}.mobile-menu{display:none}@media(max-width:800px){.admin-layout{display:block}.admin-sidebar{position:static;margin-bottom:12px}.admin-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.admin-nav button{font-size:12px}.admin-content .card{margin-bottom:12px}}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}
+    .wrap{max-width:1180px;margin:auto;padding:18px}.admin-layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:16px;align-items:start}.admin-sidebar{position:sticky;top:12px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px}.admin-sidebar h3{font-size:14px;margin:4px 8px 12px}.admin-nav{display:flex;flex-direction:column;gap:6px}.admin-nav button{border:0;background:transparent;text-align:left;padding:11px 12px;border-radius:10px;font:inherit;font-weight:700;color:#374151;cursor:pointer}.admin-nav button.active,.admin-nav button:hover{background:#eff6ff;color:#1d4ed8}.admin-content{min-width:0}.mobile-menu{display:none}.user-layout{display:grid;grid-template-columns:200px minmax(0,1fr);gap:16px;align-items:start}.user-sidebar{position:sticky;top:12px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px}.user-sidebar h3{font-size:14px;margin:4px 8px 12px}.user-nav{display:flex;flex-direction:column;gap:6px}.user-nav button{border:0;background:transparent;text-align:left;padding:11px 12px;border-radius:10px;font:inherit;font-weight:700;color:#374151;cursor:pointer}.user-nav button.active,.user-nav button:hover{background:#eff6ff;color:#1d4ed8}.user-content{min-width:0}@media(max-width:800px){.user-layout{display:block}.user-sidebar{position:static;margin-bottom:12px}.user-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.user-nav button{font-size:12px}}@media(max-width:800px){.admin-layout{display:block}.admin-sidebar{position:static;margin-bottom:12px}.admin-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.admin-nav button{font-size:12px}.admin-content .card{margin-bottom:12px}}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}
     h1,h2,h3,p{margin-top:0}.brand{font-weight:800;font-size:22px}.muted{color:var(--muted);font-size:13px}
     .notice{background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:12px;font-size:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 5px 20px #00000008;margin-bottom:16px}
     .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
@@ -48,28 +48,35 @@
   </div>
 
   <div id="userView" class="hidden">
-    <div class="top">
-      <div><div class="brand">📒 Catatan Hutang</div><div class="muted">Halo, <b id="userTitle"></b></div></div>
-      <button class="btn ghost" onclick="logout()">Keluar</button>
-    </div>
-    <div class="card">
-      <div class="user-head"><div><div class="muted">Total sisa hutang</div><div id="userTotal" class="amount">Rp 0</div></div><button class="btn ghost" onclick="loadUser()">↻ Refresh</button></div>
-    </div>
-    <div class="card">
-      <h2>📤 Permintaan Pembayaran</h2>
-      <p class="muted">Klik <b>Bayar</b> pada hutang Anda, upload bukti transfer dari galeri HP, lalu tunggu persetujuan admin.</p>
-      <div id="userRequests"></div>
-    </div>
-    <div class="card">
-      <div class="top"><div><h2 style="margin-bottom:2px">💬 Pesan dengan Admin <span id="userUnreadBadge" class="unread-dot hidden">0</span></h2><div class="muted">Diskusi pribadi dengan admin. Pesan tersimpan di Google Sheet.</div></div><button class="btn ghost" onclick="loadUserChat(true)">↻ Refresh</button></div>
-      <div id="userChatMessages" class="chat-messages"><div class="empty" style="padding:20px">Belum ada pesan.</div></div>
-      <div class="chat-compose"><input id="userChatInput" maxlength="2000" placeholder="Tulis pesan ke admin..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendUserChat()}"><button class="btn primary" onclick="sendUserChat()">Kirim</button></div>
-      <div id="userChatMsg" style="margin-top:8px"></div>
-    </div>
-
-    <div class="card">
-      <h2>Rincian Hutang</h2>
-      <div id="userTable"></div>
+    <div class="user-layout">
+      <aside class="user-sidebar">
+        <h3>📒 Menu Pelanggan</h3>
+        <nav class="user-nav">
+          <button class="active" onclick="showUserSection('userHome',this)">🏠 Beranda</button>
+          <button onclick="showUserSection('userPayments',this)">📤 Pembayaran</button>
+          <button onclick="showUserSection('userDebts',this)">📋 Rincian Hutang</button>
+          <button onclick="showUserSection('userChat',this)">💬 Chat Admin</button>
+          <button onclick="logout()">🚪 Keluar</button>
+        </nav>
+      </aside>
+      <main class="user-content">
+        <div class="top">
+          <div><div class="brand">📒 Catatan Hutang</div><div class="muted">Halo, <b id="userTitle"></b></div></div>
+          <button class="btn ghost" onclick="logout()">Keluar</button>
+        </div>
+        <section id="userHome" class="user-section">
+          <div class="card"><div class="user-head"><div><div class="muted">Total sisa hutang</div><div id="userTotal" class="amount">Rp 0</div></div><button class="btn ghost" onclick="loadUser()">↻ Refresh</button></div></div>
+        </section>
+        <section id="userPayments" class="user-section hidden">
+          <div class="card"><h2>📤 Permintaan Pembayaran</h2><p class="muted">Klik <b>Bayar</b> pada hutang Anda, upload bukti transfer dari galeri HP, lalu tunggu persetujuan admin.</p><div id="userRequests"></div></div>
+        </section>
+        <section id="userDebts" class="user-section hidden">
+          <div class="card"><h2>Rincian Hutang</h2><div id="userTable"></div></div>
+        </section>
+        <section id="userChat" class="user-section hidden">
+          <div class="card"><div class="top"><div><h2 style="margin-bottom:2px">💬 Pesan dengan Admin <span id="userUnreadBadge" class="unread-dot hidden">0</span></h2><div class="muted">Diskusi pribadi dengan admin. Pesan tersimpan di Google Sheet.</div></div><button class="btn ghost" onclick="loadUserChat(true)">↻ Refresh</button></div><div id="userChatMessages" class="chat-messages"><div class="empty" style="padding:20px">Belum ada pesan.</div></div><div class="chat-compose"><input id="userChatInput" maxlength="2000" placeholder="Tulis pesan ke admin..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendUserChat()}"><button class="btn primary" onclick="sendUserChat()">Kirim</button></div><div id="userChatMsg" style="margin-top:8px"></div></div>
+        </section>
+      </main>
     </div>
   </div>
 
@@ -233,6 +240,13 @@
   let adminToken = "", adminData = [], adminUsers = [], adminPaymentRequests = [], currentUser = "", userToken = "", paymentDebtId = "", userPaymentDebtId = "";
   let userChatMessages = [], adminChatThreads = [], activeAdminChatName = "", userChatTimer = null, adminChatTimer = null;
   const USER_SESSION_KEY = "catatan_hutang_user_session_v1";
+
+  function showUserSection(id,btn){
+    document.querySelectorAll('.user-section').forEach(el=>el.classList.add('hidden'));
+    const target=document.getElementById(id); if(target) target.classList.remove('hidden');
+    document.querySelectorAll('.user-nav button').forEach(b=>b.classList.toggle('active',b===btn));
+    if(id==='userChat') loadUserChat(false);
+  }
 
   function showAdminSection(id,btn){
     document.querySelectorAll('.admin-section').forEach(el=>el.classList.add('hidden'));
